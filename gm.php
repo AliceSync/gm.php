@@ -6,6 +6,8 @@ namespace {
     \sys\html\common::$web_name = '作死联萌单文件管理系统';
     \sys\user\login::password('youpassword'); # 这里是登录密码设置
     \sys\user\status::init();
+    \sys\auth::init($_SERVER['HTTP_CF_CONNECTING_IP']); # HTTP_CF_CONNECTING_IP, REMOTE_ADDR
+    \sys\db::init('/dev/shm/db.db'); # file in "/dev/shm/" you reboot you system this file remove # sys_get_temp_dir() . 'db.db'
     \sys\data::init($_POST, $_GET);
     \sys\event::init($_REQUEST);
 }
@@ -52,6 +54,9 @@ namespace sys {
         }
         public static function _login_auth()
         {
+            if (!auth::ip_qps()) {
+                \sys\html\display_text(data::msg(0, '验证错误次数超过qbs限制阈值,已封锁2小时!'));
+            }
             if (!data::isset(data::post('password')) || !\sys\user\login::login(data::post('password'))) {
                 \sys\html\display_text(data::msg(0, '密码错误'));
             }
@@ -83,6 +88,77 @@ namespace sys {
         public static function msg($code, $m)
         {
             return json_encode(['code' => $code, 'msg' => $m], JSON_UNESCAPED_UNICODE);
+        }
+    }
+}
+
+namespace sys {
+    class auth
+    {
+        private static $header_ip;
+        public static function init($header_ip)
+        {
+            self::$header_ip = $header_ip;
+        }
+        public static function ip_qps($max_num = 10)
+        {
+            $header_ip = self::$header_ip;
+            $times     = time();
+            $arr       = db::find('ip', "ip = '$header_ip'");
+            db::delete('ip', "$times - mkt > 3600");
+            if (empty($arr)) {
+                db::insert('ip', 'ip,num,mkt', "'$header_ip',1,$times");
+                return true;
+            }
+            if ($arr['num'] > $max_num and $arr['ext'] < ($times + 3600)) {
+                return false;
+            }
+            if ($arr['num'] == $max_num) {
+                $times += 3600;
+                db::update('ip', "ext = $times,num = num + 1", "ip = '$header_ip'");
+                return false;
+            }
+            db::update('ip', "num = num + 1", "ip = '$header_ip'");
+            return true;
+        }
+    }
+    class db
+    {
+        private static $db;
+        public static function init($db_file)
+        {
+            try {
+                self::$db = new \SQLite3($db_file);
+                self::$db->enableExceptions(true);
+            } catch (\Throwable $th) {
+                exit('db connect error!');
+            }
+            self::$db->exec('CREATE TABLE IF NOT EXISTS ip (
+                ip TEXT PRIMARY KEY  NOT NULL,
+                num             INT  NOT NULL,
+                mkt             INT  NOT NULL,
+                ext             INT
+             )');
+        }
+        public static function insert($table, $names, $values)
+        {
+            self::$db->exec("INSERT INTO $table ($names) VALUES ($values)");
+        }
+        public static function update($table, $set, $where = '1')
+        {
+            self::$db->exec("UPDATE $table SET $set WHERE $where");
+        }
+        public static function select($table, $where = '1', $names = '*')
+        {
+            return self::$db->query("SELECT $names FROM $table WHERE $where");
+        }
+        public static function find($table, $where = '1', $names = '*')
+        {
+            return self::$db->querySingle("SELECT $names FROM $table WHERE $where", true);
+        }
+        public static function delete($table, $where = '1')
+        {
+            return self::$db->query("DELETE FROM $table WHERE $where;");
         }
     }
 }
