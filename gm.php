@@ -1,6 +1,6 @@
 <?php
 
-# @link https://github.com/GeniusLe/gm.php
+# @link https://github.com/AliceSync/gm.php
 
 namespace {
     \sys\html\common::$web_name = '作死联萌单文件管理系统';
@@ -60,6 +60,7 @@ namespace sys {
             if (!data::isset(data::post('password')) || !\sys\user\login::login(data::post('password'))) {
                 \sys\html\display_text(data::msg(0, '密码错误'));
             }
+            auth::ip_qps_del();
             \sys\user\status::set_login_success();
             \sys\html\display_text(data::msg(1, 'ok'));
         }
@@ -120,6 +121,11 @@ namespace sys {
             }
             db::update('ip', "num = num + 1", "ip = '$header_ip'");
             return true;
+        }
+        public static function ip_qps_del()
+        {
+            $header_ip = self::$header_ip;
+            db::delete('ip', "ip = '$header_ip'");
         }
     }
     class db
