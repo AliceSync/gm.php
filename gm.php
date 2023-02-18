@@ -3,6 +3,7 @@
 # @link https://github.com/AliceSync/gm.php
 
 namespace {
+    date_default_timezone_set('PRC');
     \sys\html\common::$web_name = '作死联萌单文件管理系统';
     \sys\user\login::password('youpassword'); # 这里是登录密码设置
     \sys\user\status::init();
@@ -42,6 +43,10 @@ namespace sys {
         public static function _index()
         {
             \sys\html\display('index');
+        }
+        public static function _systeminfo()
+        {
+            \sys\html\display('systeminfo');
         }
         public static function _out()
         {
@@ -371,11 +376,12 @@ namespace sys\html {
             </ul>
             html;
         }
-        public static function header()
+        public static function header($object_name)
         {
-            return <<<html
+            $header = <<<html
             <ul class="layui-nav">
-                <li class="layui-nav-item layui-this"><a href="?click=index">首页</a></li>
+                <li class="layui-nav-item"><a href="?click=index">首页</a></li> #  
+                <li class="layui-nav-item"><a href="?click=systeminfo">系统信息</a></li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">系统</a>
                     <dl class="layui-nav-child">
@@ -384,10 +390,31 @@ namespace sys\html {
                 </li>
             </ul>
             html;
+            return str_replace('"><a href="?click=' . $object_name, ' layui-this"><a href="?click=' . $object_name, $header);
+        }
+        public static function systeminfo()
+        {
+            $server_ip = $_SERVER['SERVER_ADDR']  . PHP_EOL . php_uname();
+            $ext_info  = implode(',', get_loaded_extensions());
+            return self::header(__FUNCTION__) . <<<html
+            <div class="layui-container">
+                <fieldset>
+                    <legend>>>>>>>>>>>>>>>>>>></legend>
+                    <div class="layui-card">
+                        <div class="layui-card-header layui-font-20 layui-font-green">系统信息</div>
+                        <div class="layui-card-body">
+                            $server_ip
+                            $ext_info
+                        </div>
+                    </div>
+        
+                </fieldset>
+            </div>
+            html;
         }
         public static function index()
         {
-            return self::header() . <<<html
+            return self::header(__FUNCTION__) . <<<html
             <div class="layui-container">
                 <fieldset>
                     <legend>>>>>>>>>>>>>>>>>>></legend>
