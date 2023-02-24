@@ -968,10 +968,6 @@ namespace sys\html {
                                                     <td>{$sys_info['name']}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>开机时长</td>
-                                                    <td>$start_info 小时</td>
-                                                </tr>
-                                                <tr>
                                                     <td>cpu 型号</td>
                                                     <td>{$cpu_info['cpu_name']}</td>
                                                 </tr>

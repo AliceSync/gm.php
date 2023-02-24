@@ -1,8 +1,20 @@
 # gm.php
 Manage your server with a single php script file
 
+> php version >= 8.0.0 !
 > Support php-fpm swoole
 > implementation php-cli
+> Support kiwivm api and solusvm api
+
+> display images
+
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/php_info.png)
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/system_info.png)
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/realtime_info.png)
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/vps_info.png)
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/log_display_info.png)
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/log_info.png)
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/home.png)
 
 > if you need use nginx log display
 
