@@ -1112,7 +1112,7 @@ namespace sys\html {
                         $('.status_type').html('未运行');
                     }
                 }
-                
+
             </script>
             html;
         }
@@ -1517,16 +1517,16 @@ namespace zslm\vps {
                 $ret['api_type'] = 'solusvm';
                 $ret['type']     = 'solusvm模式无法获取';
                 $ret['ip']       = $info['ipaddr'] ?? null;
-                $ret['os']       = 'solusvm模式无法获取' ?? null;
-                $ret['hostname'] = $info['hostname'];
-                $ret['node_ip']  = 'solusvm模式无法获取' ?? null;
-                $ret['location'] = 'solusvm模式无法获取' ?? null;
-                $ret['disk_max'] = (explode(',', $info['hdd']))[0];
-                $ret['ram_max']  = (explode(',', $info['mem']))[0];
-                $ret['net_max']  = (explode(',', $info['bw']))[0];
-                $ret['net_use']  = (explode(',', $info['bw']))[1];
-                $ret['disk_use'] = (explode(',', $info['hdd']))[1];
-                $ret['ram_use']  = (explode(',', $info['mem']))[1];
+                $ret['os']       = 'solusvm模式无法获取';
+                $ret['hostname'] = $info['hostname'] ?? null;
+                $ret['node_ip']  = 'solusvm模式无法获取';
+                $ret['location'] = 'solusvm模式无法获取';
+                $ret['disk_max'] = intval((explode(',', $info['hdd']))[0]) ?: 1;
+                $ret['ram_max']  = intval((explode(',', $info['mem']))[0]) ?: 1;
+                $ret['net_max']  = intval((explode(',', $info['bw']))[0]) ?: 1;
+                $ret['net_use']  = intval((explode(',', $info['bw']))[1]) ?: 1;
+                $ret['disk_use'] = intval((explode(',', $info['hdd']))[1]) ?: 1;
+                $ret['ram_use']  = intval((explode(',', $info['mem']))[1]) ?: 1;
                 $ret['status']   = $info['status'] ?? null;
                 return $ret;
             }
