@@ -2,8 +2,11 @@
 Manage your server with a single php script file
 
 > php version >= 8.0.0 !
+
 > Support php-fpm swoole
+
 > implementation php-cli
+
 > Support kiwivm api and solusvm api
 
 > display images
