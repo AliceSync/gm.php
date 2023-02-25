@@ -14,6 +14,7 @@ Manage your server with a single php script file
 ![image](https://github.com/AliceSync/gm.php/blob/master/README_images/php_info.png)
 ![image](https://github.com/AliceSync/gm.php/blob/master/README_images/system_info.png)
 ![image](https://github.com/AliceSync/gm.php/blob/master/README_images/realtime_info.png)
+![image](https://github.com/AliceSync/gm.php/blob/master/README_images/realtime_info1.png)
 ![image](https://github.com/AliceSync/gm.php/blob/master/README_images/vps_info.png)
 ![image](https://github.com/AliceSync/gm.php/blob/master/README_images/log_display_info.png)
 ![image](https://github.com/AliceSync/gm.php/blob/master/README_images/log_info.png)
